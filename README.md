@@ -44,6 +44,10 @@ amazon_products_analytics/
 │   │   ├── __init__.py
 │   │   ├── exceptions.py
 │   │   └── response_models.py
+│   ├── frontend/
+│   │   ├── static/
+│   │   ├── __init__.py
+│   │   └── app.py
 │   ├── scraper/
 │   │   ├── amazon_scraper.py
 │   │   └── scheduler.py
@@ -96,15 +100,28 @@ pip install -r requirements.txt
 
 1. Configure environment variables in `.env` file in the root directory.
 
-
-5. Set up PostgreSQL:
+1. Set up PostgreSQL database named `amazon_products`.
 ```bash
-psql -U postgres -f scripts/init_db.sql
+sudo -u postgres psql
+CREATE DATABASE amazon_products;
+\q
 ```
 
-6. Start the services using Docker Compose:
+1. Start the weaviate database using Docker Compose:
 ```bash
-docker-compose up -d
+cd app/rag
+docker compose up -d
+cd -
+```
+
+1. Start the backend app:
+```bash
+python3 app/app.py
+```
+
+1. Start the frontend app:
+```bash
+streamlit run app/frontend/app.py
 ```
 
 
@@ -113,29 +130,29 @@ docker-compose up -d
 ### Starting the API Server
 
 ```bash
-uvicorn app.main:app --reload
+python3 app/app.py
 ```
 
-The API will be available at `http://localhost:8000`
+The API will be available at `http://localhost:8001`
 
 ### API Documentation
 
 Once the server is running, visit:
-- Swagger UI: `http://localhost:8000/docs`
+- Swagger UI: `http://localhost:8001/docs`
 
 ### Running the Scraper
 
 ```bash
-python -m app.scraper.scheduler
+python3 app/app.py
 ```
 
 ### Using the RAG System
 
-```python
-from app.llm.rag import AnalyticsRAG
-
-rag = AnalyticsRAG(db_session, openai_api_key)
-response = rag.query("What are the top-rated watches under $500?")
+```bash
+curl -X 'POST' \
+  'http://localhost:8001/rag/query?question=hi' \
+  -H 'accept: application/json' \
+  -d ''
 ```
 
 ## 🔌 API Endpoints
@@ -156,23 +173,22 @@ response = rag.query("What are the top-rated watches under $500?")
 
 The project is containerized and can be deployed to any cloud provider that supports Docker containers.
 
-Here's how to deploy using AWS:
+Here's my way of deploying this app using AWS:
 
 ### AWS
 
 1. **API & Scraping Service**: 
-   - **EC2** for hosting the FastAPI app.
-   - **ECS** for container orchestration
-   - **AWS Lambda** can schedule periodic scraping tasks.
+   - **EC2** for hosting the FastAPI app. EC2 is the fully-managed service so its really customizable.
+   - **ECS** for container orchestration. This will be useful when there's a lot of different products to scrape.
 
 2. **Database**: 
-   - **Amazon RDS** for PostgreSQL database.
+   - **Amazon RDS** for PostgreSQL database. This is one of the most versatile DB services as it can be useful to migrate into a different open-source databases later on. It is also very configurable. Such as if we need to sync with other DB such as Elasticsearch, we can readily configure it.
 
 3. **AI Model**:
-   - **SageMaker** for deploying the LLM model as an API endpoint.
+   - **SageMaker** for deploying the LLM model as an API endpoint. This can be auto-scaled so deploying fine-tuned models from SageMaker can be really easy. Also we can setup custom training and evaluation pipeline through this service.
 
 4. **Storage**: 
-   - **S3** for storing scraped product images.
+   - **S3** for storing scraped product images. S3 offers different tiers of persistence of the storage. So, this is a must for storing images and using CloudFront or CDN's to make the access time tailored to specific zones.
 
 5. **Monitoring**:
    - **CloudWatch** for logs and performance monitoring of the services.
@@ -180,4 +196,4 @@ Here's how to deploy using AWS:
 
 ## 👨🏻‍💻 Author
 
-Created by Abir.
+Created by [Abir](https://www.linkedin.com/in/abir0/).

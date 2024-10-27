@@ -29,9 +29,8 @@ A comprehensive analytics platform for scraping, analyzing, and serving products
 - **Backend**: Python 3.9+, FastAPI
 - **Database**: PostgreSQL, SQLAlchemy
 - **Scraping**: Playwright, BeautifulSoup4
-- **AI/ML**: Transformers, Weaviate, OpenAI
-- **DevOps**: Docker
-- **Testing**: pytest
+- **AI/ML**: Weaviate, OpenAI, Docker
+- **Frontend**: Streamlit
 
 
 ## 📚 Project Structure
@@ -72,10 +71,10 @@ amazon_products_analytics/
 
 ### 📋 Prerequisites
 
-- Python 3.9 or higher
+- Python 3.9+
 - Docker
 - PostgreSQL
-- OpenAI API key
+- OpenAI API Key
 - Weaviate
 - Chrome WebDriver
 
@@ -87,39 +86,39 @@ git clone https://github.com/abir0/amazon-products-analytics.git
 cd amazon-products-analytics
 ```
 
-1. Create and activate a virtual environment:
+2. Create and activate a virtual environment:
 ```bash
 python -m venv venv
 source venv/bin/activate  # On Windows: .\venv\Scripts\activate
 ```
 
-1. Install dependencies:
+3. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-1. Configure environment variables in `.env` file in the root directory.
+4. Configure environment variables in `.env` file in the root directory.
 
-1. Set up PostgreSQL database named `amazon_products`.
+5. Set up PostgreSQL database named `amazon_products`.
 ```bash
 sudo -u postgres psql
 CREATE DATABASE amazon_products;
 \q
 ```
 
-1. Start the weaviate database using Docker Compose:
+6. Start the weaviate database using Docker Compose:
 ```bash
 cd app/rag
 docker compose up -d
 cd -
 ```
 
-1. Start the backend app:
+7. Start the backend app:
 ```bash
 python3 app/app.py
 ```
 
-1. Start the frontend app:
+8. Start the frontend app:
 ```bash
 streamlit run app/frontend/app.py
 ```
@@ -171,7 +170,7 @@ curl -X 'POST' \
 
 ## 📦 Cloud Deployment
 
-The project is containerized and can be deployed to any cloud provider that supports Docker containers.
+This project is containerized and can be deployed to any cloud provider that supports Docker containers.
 
 Here's my way of deploying this app using AWS:
 

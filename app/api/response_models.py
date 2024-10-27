@@ -3,7 +3,7 @@ from typing import List, Optional
 from pydantic import BaseModel
 
 
-# Review Response Model
+# Review Response Models
 class ReviewResponse(BaseModel):
     id: int
     reviewer_name: Optional[str]
@@ -34,14 +34,10 @@ class ProductBase(BaseModel):
 
 
 class ProductResponse(ProductBase):
-    """Basic product response without reviews"""
-
     pass
 
 
 class ProductWithReviewsResponse(ProductBase):
-    """Product response including reviews"""
-
     reviews: List[ReviewResponse]
 
 
@@ -65,6 +61,6 @@ class PaginatedReviewsResponse(BaseModel):
     items: List[ReviewResponse]
 
 
-# Error Response Model
+# Error Response Models
 class ErrorResponse(BaseModel):
     detail: str

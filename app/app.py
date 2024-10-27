@@ -7,6 +7,7 @@ import uvicorn
 
 from api.routers import products
 from api.routers import scheduler
+from api.routers import rag
 from api.exceptions import APIError
 from api.exceptions import api_error_handler, general_error_handler
 from config import get_config
@@ -27,6 +28,7 @@ app = FastAPI(
 
 app.include_router(products.router)
 app.include_router(scheduler.router)
+app.include_router(rag.router)
 
 # Register exception handlers on the app
 app.add_exception_handler(APIError, api_error_handler)
@@ -63,7 +65,6 @@ async def startup_event():
             days=3,
             id="product_scraping_job",
             replace_existing=True,
-            # Run immediately on startup
             next_run_time=datetime.now(),
         )
 

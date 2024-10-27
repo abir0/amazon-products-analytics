@@ -8,7 +8,6 @@ router = APIRouter(prefix="/scheduler")
 
 @router.get("/status")
 async def get_scheduler_status():
-    """Get the current status of the scheduler and its jobs"""
     try:
         jobs = []
         for job in job_scheduler.get_jobs():
@@ -37,7 +36,6 @@ async def get_scheduler_status():
 # Scheduler control endpoints
 @router.post("/pause/{job_id}")
 async def pause_job(job_id: str):
-    """Pause a specific scheduled job"""
     try:
         job_scheduler.pause_job(job_id)
         return {"message": f"Successfully paused job {job_id}"}
@@ -48,7 +46,6 @@ async def pause_job(job_id: str):
 
 @router.post("/resume/{job_id}")
 async def resume_job(job_id: str):
-    """Resume a specific scheduled job"""
     try:
         job_scheduler.resume_job(job_id)
         return {"message": f"Successfully resumed job {job_id}"}

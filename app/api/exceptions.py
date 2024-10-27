@@ -43,7 +43,7 @@ class InvalidParameterError(APIError):
         )
 
 
-# Define your exception handlers here as before
+# Exception handlers
 async def api_error_handler(request, exc: APIError):
     return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
 
